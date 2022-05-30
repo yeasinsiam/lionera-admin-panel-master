@@ -1,0 +1,20 @@
+.site-card-border-less-wrapper {
+  border-radius: 10px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  max-width: 320px;
+}
+
+.button-container {
+  height: 23px;
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button {
+  position: absolute;
+  bottom: -28px;
+}
+
+
+
+

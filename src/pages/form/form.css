@@ -1,0 +1,10 @@
+.formDiv table{
+    width: 100%;
+
+}
+.formDiv table tr{
+    border-bottom: 1px solid #ddd;
+}
+.formDiv table td{
+    padding: 10px 0;
+}

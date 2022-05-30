@@ -1,0 +1,19 @@
+.slideshow-div{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr ;
+    grid-gap: 20px;
+}
+
+.slideshow-div video{
+    width: 100%;
+    box-shadow: 0 0 30px #ddd;
+}
+
+
+
+.slideshowAction{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 30px;
+    background: #fff;
+}

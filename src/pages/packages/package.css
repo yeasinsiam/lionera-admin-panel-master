@@ -1,0 +1,23 @@
+.package-div{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+   
+}
+
+.package-div .item{
+    box-shadow: 0 0 2px #ddd;
+    padding: 20px;
+    background: #fff;
+
+}
+
+.package-div .item ul li{
+    color:#DD0D51
+}
+
+
+
+#createOccassionForm .ant-space-item:first-child{
+  flex-grow: 2;
+} 

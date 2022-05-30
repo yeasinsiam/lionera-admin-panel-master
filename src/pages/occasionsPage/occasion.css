@@ -1,0 +1,16 @@
+.occationsTable table{
+    width: 100%;
+}
+
+.occationsTable table td{
+    border-bottom: 1px solid #ddd;
+}
+.OccationsThumnails {
+    height: 50px;
+    padding: 10px 0;
+}
+
+.OccationsThumnails img{
+    height: 100%;
+    object-fit: cover;
+}

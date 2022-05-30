@@ -1,0 +1,14 @@
+.custom-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #dd0d51;
+  padding: 15px;
+  font: normal normal normal 16px/25px Poppins;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 10s;
+}
