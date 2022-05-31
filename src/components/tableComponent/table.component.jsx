@@ -79,7 +79,7 @@ const TableComponent = ({ data, tableSort }) => {
           }}
         >
           <Text
-            type={order.status === "Complete" ? "success" : "danger"}
+            type={order.status === "complete" ? "success" : "danger"}
             style={{ paddingRight: "6px" }}
           >
             {order.status}
