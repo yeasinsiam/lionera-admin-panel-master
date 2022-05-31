@@ -6,26 +6,7 @@ import { formatDate } from "../../helpers/others";
 
 const OrderManager = () => {
   const [isLoading, setLoading] = useState(true);
-  const [tableData, setTableData] = useState([
-    {
-      key: "1",
-      orderId: "1",
-      orderDate: "09/11/2020",
-      addons: "Yes",
-      package: "Pro",
-      total: "AED 150",
-      status: "Complete",
-    },
-    {
-      key: "2",
-      orderId: "2",
-      orderDate: "09/11/2020",
-      addons: "Yes",
-      package: "Pro",
-      total: "AED 150",
-      status: "Incomplete",
-    },
-  ]);
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     loadOrders();
@@ -64,9 +45,8 @@ const formatDataTable = (tableData) => {
       key: `${index + 1}`,
       orderId: data._id,
       orderDate: formatDate(data.createdAt),
-      // orderDate: "09/11/2020",
       addons: data.addons.length ? "Yes" : "No",
-      package: data.package.mostPopular ? "Pro" : "Not",
+      package: data.package.title,
       total: "AED 150",
       status: data.order_status,
     });

@@ -1,4 +1,4 @@
-import { Typography, Card, Spin } from "antd";
+import { Typography, Card, Spin, Select, Row, Col, message } from "antd";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import ReactPlayer from "react-player";
 const OrderDetailsPage = () => {
   const { Text } = Typography;
   const [isLoading, setLoading] = useState(true);
+  const [orderStatusLoading, setOrderStatusLoading] = useState(false);
   const [order, setOrder] = useState([]);
   const { orderId } = useParams();
 
@@ -32,6 +33,24 @@ const OrderDetailsPage = () => {
   if (isLoading) {
     return <Spin />;
   }
+
+  const handleChangeOrderStatus = async (value) => {
+    setOrderStatusLoading(true);
+
+    const body = {
+      order_status: value,
+    };
+    try {
+      await axios.put(`/api/v1/orders/${order._id}`, {
+        ...body,
+      });
+    } catch (err) {
+      console.log(err);
+      message.error(`Something went wrong, Refresh and try again`);
+    }
+    setOrderStatusLoading(false);
+  };
+
   console.log(order);
   return (
     <div style={{ paddingTop: "6rem" }}>
@@ -40,42 +59,65 @@ const OrderDetailsPage = () => {
         Order Details{" "}
       </Typography.Title>
       <Card style={{ marginTop: "4rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              Order#:{" "}
-            </Text>
-            <Text> {order._id} </Text>
-          </span>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              Order Date:{" "}
-            </Text>
-            <Text> {formatDate(order.createdAt)} </Text>
-          </span>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              Package:{" "}
-            </Text>
-            <Text> {order.package.mostPopular ? "Pro" : "Not"} </Text>
-          </span>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              Status:{" "}
-            </Text>
-            <Text
-              type={order.status === "Incomplete" && "danger"}
-              style={{ textTransform: "capitalize" }}
-            >
-              {" "}
-              {order.order_status}{" "}
-            </Text>
-          </span>
-        </div>
+        <Row
+          gutter={[50, 20]}
+          // gutter={{
+          //   xs: 0,
+          //   // sm: 0,
+          //   md: 50,
+          // }}
+        >
+          <Col className="gutter-row" xs={24} md={6}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                Order#:{" "}
+              </Text>
+              <Text> {order._id} </Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={6}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                Order Date:{" "}
+              </Text>
+              <Text> {formatDate(order.createdAt)} </Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={6}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                Package:{" "}
+              </Text>
+              <Text> {order.package.title} </Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={6}>
+            <span>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "black",
+                  marginRight: ".5rem",
+                }}
+              >
+                Status:
+              </Text>
+              <Select
+                defaultValue={order.order_status}
+                loading={orderStatusLoading}
+                onChange={handleChangeOrderStatus}
+              >
+                <Select.Option value="pending">Pending</Select.Option>
+                <Select.Option value="delivered">Delivered</Select.Option>
+                <Select.Option value="canceled">Canceled</Select.Option>
+                <Select.Option value="refund">Refund</Select.Option>
+              </Select>
+            </span>
+          </Col>
+        </Row>
       </Card>
 
       <Typography.Title
@@ -87,73 +129,97 @@ const OrderDetailsPage = () => {
           paddingTop: "4rem",
         }}
       >
-        {" "}
-        User Details:{" "}
+        User Details:
       </Typography.Title>
 
       <Card>
-        <div style={{ padding: "10px 0" }}>
-          <span style={{ paddingRight: "6rem" }}>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              User Name:{" "}
-            </Text>
-            <Text>{order.shipping.name}</Text>
-          </span>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              Email Adress:{" "}
-            </Text>
-            <Text>{order.shipping.email}</Text>
-          </span>
-        </div>
-        <div style={{ padding: "10px 0" }}>
-          <span style={{ paddingRight: "7rem" }}>
-            <Text style={{ fontWeight: "bold", color: "black" }}> Phone: </Text>
-            <Text>
-              +{order.shipping.areaCode}-{order.shipping.phone}
-            </Text>
-          </span>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              Shipping Adress:{" "}
-            </Text>
-            <Text> {order.shipping.addressLine1} </Text>
-          </span>
-        </div>
+        <Row gutter={[50, 20]} style={{ paddingBottom: "1rem" }}>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span style={{ paddingRight: "6rem" }}>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                User Name:
+              </Text>
+              <Text>{order.shipping.name}</Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                Email Adress:{" "}
+              </Text>
+              <Text>{order.shipping.email}</Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span style={{ paddingRight: "7rem" }}>
+              <Text style={{ fontWeight: "bold", color: "black" }}>Phone:</Text>
+              <Text>
+                +{order.shipping.areaCode}-{order.shipping.phone}
+              </Text>
+            </span>
+          </Col>
+        </Row>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "10px 0",
-          }}
-        >
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}> City: </Text>
-            <Text> {order.shipping.city} </Text>
-          </span>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}> State: </Text>
-            <Text> {order.shipping.state} </Text>
-          </span>
-          <span>
+        <Row gutter={[50, 20]} style={{ paddingBottom: "1rem" }}>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                Shipping Adress Line One:
+              </Text>
+              <br />
+              <Text> {order.shipping.addressLine1} </Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                Shipping Adress Line Two:
+              </Text>
+              <br />
+              <Text> {order.shipping.addressLine2} </Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                Country:{" "}
+              </Text>
+              <Text> {order.shipping.country} </Text>
+            </span>
+          </Col>
+        </Row>
+
+        <Row gutter={[50, 20]} style={{ paddingBottom: "1rem" }}>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                City:{" "}
+              </Text>
+              <Text> {order.shipping.city} </Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
+            <span>
+              <Text style={{ fontWeight: "bold", color: "black" }}>
+                {" "}
+                State:{" "}
+              </Text>
+              <Text> {order.shipping.state} </Text>
+            </span>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
             <Text style={{ fontWeight: "bold", color: "black" }}>
               {" "}
               Zip Code:{" "}
             </Text>
             <Text> {order.shipping.zip} </Text>
-          </span>
-          <span>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
-              {" "}
-              Country:{" "}
-            </Text>
-            <Text> {order.shipping.country} </Text>
-          </span>
-        </div>
+          </Col>
+        </Row>
       </Card>
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -224,7 +290,7 @@ const OrderDetailsPage = () => {
           </Card>
         </span>
       </div>
-      <div style={{ paddingTop: "4rem" }}>
+      {/* <div style={{ paddingTop: "4rem" }}>
         <Typography.Title level={3}> AddOns </Typography.Title>
         <Checkbox checked={true} style={{ color: "black" }}>
           {" "}
@@ -237,9 +303,7 @@ const OrderDetailsPage = () => {
             card{" "}
           </Text>
         </div>
-      </div>
-
-      {/* sdf */}
+      </div> */}
     </div>
   );
 };

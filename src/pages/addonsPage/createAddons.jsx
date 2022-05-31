@@ -21,7 +21,6 @@ function CreateAdddons() {
       };
 
       await axios.post("/api/v1/addons", { ...body });
-
       message.success(`Addon Created successfully`);
     } catch (err) {
       message.error(`Something went wrong, Refresh and try again`);
