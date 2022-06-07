@@ -12,8 +12,10 @@ const { Option } = Select;
 const Form = () => {
   const { Title } = Typography;
   const [lang, setLang] = useState("en");
+  const [selectedPackage, setSelectedPackage] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [forms, setForm] = useState([]);
+  const [packages, setPackages] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [editModal, setEditModal] = useState({
     visible: false,
@@ -22,13 +24,25 @@ const Form = () => {
 
   useEffect(() => {
     loadForm("both");
+    loadPackages("en");
   }, []);
 
-  const loadForm = async (lang) => {
-    let res = await axios.get(`/api/v1/forms?lang=${lang}`);
-    console.log(res);
+  const loadForm = async (lang, packageId = "") => {
+    let res = packageId
+      ? await axios.get(`/api/v1/forms?lang=${lang}&packageId=${packageId}`)
+      : await axios.get(`/api/v1/forms?lang=${lang}`);
+    // console.log(res);
     setForm(res.data.body.forms);
     setLoading(false);
+  };
+
+  const loadPackages = async (lang) => {
+    try {
+      let res = await axios.get(`/api/v1/packages?lang=${lang}`);
+      setPackages(res.data.body.packages);
+    } catch {
+      alert("Something went wrong");
+    }
   };
 
   const showModal = () => {
@@ -45,6 +59,7 @@ const Form = () => {
   const handleOk = () => {
     setIsModalVisible(false);
     loadForm("both");
+    loadForm("both", selectedPackage);
   };
 
   const handleEditOk = () => {
@@ -52,16 +67,22 @@ const Form = () => {
       visible: false,
       data: null,
     });
-    loadForm("both");
+    loadForm("both", selectedPackage);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  const onChange = (value) => {
+  const handleLangChange = (value) => {
     setLang(value);
+    loadPackages(value);
+    setSelectedPackage(null);
     loadForm("both");
+  };
+  const handlePackageChange = (packageId) => {
+    setSelectedPackage(packageId);
+    loadForm("both", packageId);
   };
 
   const handleEditCancel = () => {
@@ -103,14 +124,31 @@ const Form = () => {
 
       <Select
         showSearch
-        style={{ width: 200 }}
+        style={{ width: 200, marginRight: "1rem" }}
         placeholder="Select a Language"
         optionFilterProp="children"
-        onChange={onChange}
+        onChange={handleLangChange}
         defaultValue="en"
       >
         <Option value="en">English</Option>
         <Option value="ar">Arabic</Option>
+      </Select>
+
+      <Select
+        showSearch
+        style={{ width: 200 }}
+        placeholder="Filter by Package"
+        optionFilterProp="children"
+        onChange={handlePackageChange}
+        value={selectedPackage}
+      >
+        {packages.map((item, key) => {
+          return (
+            <Select.Option key={key} value={item._id}>
+              {item.title}
+            </Select.Option>
+          );
+        })}
       </Select>
 
       <br />
