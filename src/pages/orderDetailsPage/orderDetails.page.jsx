@@ -11,19 +11,28 @@ const OrderDetailsPage = () => {
   const { Text } = Typography;
   const [isLoading, setLoading] = useState(true);
   const [orderStatusLoading, setOrderStatusLoading] = useState(false);
+  const [finantialStatusLoading, setFinantialStatusLoading] = useState(false);
   const [order, setOrder] = useState([]);
+  const [orderFromData, setOrderFromData] = useState([]);
   const { orderId } = useParams();
 
   useEffect(() => {
     if (orderId) {
       loadOrder();
+      // loadOrderFormData();
     }
   }, [orderId]);
 
   const loadOrder = async () => {
     try {
-      let res = await axios.get(`/api/v1/orders/${orderId}`);
-      setOrder(res.data.body.order);
+      let orderRes = await axios.get(`/api/v1/orders/${orderId}`);
+      setOrder(orderRes.data.body.order);
+      let orderFormDatares = await axios.get(`/api/v1/form-data/${orderId}`);
+      setOrderFromData(
+        orderFormDatares.data.body.formData
+          ? Object.entries(orderFormDatares.data.body.formData.data)
+          : null
+      );
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -35,7 +44,7 @@ const OrderDetailsPage = () => {
   }
 
   const handleChangeOrderStatus = async (value) => {
-    setOrderStatusLoading(true);
+    setFinantialStatusLoading(true);
 
     const body = {
       order_status: value,
@@ -51,7 +60,23 @@ const OrderDetailsPage = () => {
     setOrderStatusLoading(false);
   };
 
-  console.log(order);
+  const handleChangeFinaltialStatus = async (value) => {
+    setOrderStatusLoading(true);
+
+    const body = {
+      financial_status: value,
+    };
+    try {
+      await axios.put(`/api/v1/orders/${order._id}`, {
+        ...body,
+      });
+    } catch (err) {
+      console.log(err);
+      message.error(`Something went wrong, Refresh and try again`);
+    }
+    setOrderStatusLoading(false);
+  };
+
   return (
     <div style={{ paddingTop: "6rem" }}>
       <Typography.Title level={3} style={{ fontWeight: "bold" }}>
@@ -94,8 +119,13 @@ const OrderDetailsPage = () => {
               <Text> {order.package.title} </Text>
             </span>
           </Col>
-          <Col className="gutter-row" xs={24} md={6}>
-            <span>
+          <Col
+            className="gutter-row"
+            xs={24}
+            md={6}
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <span style={{ marginBottom: "1rem" }}>
               <Text
                 style={{
                   fontWeight: "bold",
@@ -113,6 +143,26 @@ const OrderDetailsPage = () => {
                 <Select.Option value="pending">Pending</Select.Option>
                 <Select.Option value="delivered">Delivered</Select.Option>
                 <Select.Option value="canceled">Canceled</Select.Option>
+                <Select.Option value="refund">Refund</Select.Option>
+              </Select>
+            </span>
+            <span>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "black",
+                  marginRight: ".5rem",
+                }}
+              >
+                Financial Status:
+              </Text>
+              <Select
+                defaultValue={order.financial_status}
+                loading={finantialStatusLoading}
+                onChange={handleChangeFinaltialStatus}
+              >
+                <Select.Option value="unpaid">Unpaid</Select.Option>
+                <Select.Option value="paid">Paid</Select.Option>
                 <Select.Option value="refund">Refund</Select.Option>
               </Select>
             </span>
@@ -222,6 +272,104 @@ const OrderDetailsPage = () => {
         </Row>
       </Card>
 
+      <Card>
+        <Row gutter={[50, 20]} style={{ paddingBottom: "1rem" }}>
+          <Col className="gutter-row" xs={24} md={8}>
+            <Typography.Title
+              style={{
+                marginTop: "3rem",
+                fontWeight: "bold",
+                marginTop: "3rem",
+              }}
+              level={3}
+            >
+              {" "}
+              Card Design
+            </Typography.Title>
+            <Card style={{ width: 400 }}>
+              {order.design.gallery.map((item) => (
+                <ImageCard imgSrc={item.url} />
+              ))}
+            </Card>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
+            <Typography.Title
+              style={{
+                marginTop: "3rem",
+                fontWeight: "bold",
+                marginTop: "3rem",
+              }}
+              level={3}
+            >
+              Video Design
+            </Typography.Title>
+            <Card style={{ width: "100%" }}>
+              <ReactPlayer
+                url={order.slideshow.URL}
+                fallback={<p>Loading</p>}
+                width="100%"
+              />
+            </Card>
+          </Col>
+          <Col className="gutter-row" xs={24} md={8}>
+            <Typography.Title
+              style={{ marginTop: "3rem", fontWeight: "bold" }}
+              level={3}
+            >
+              Price Breakdown
+            </Typography.Title>
+            <Card style={{ width: 400, marginTop: 0, minHeight: 400 }}>
+              <div>
+                <Text style={{ color: "black", fontWeight: "bold" }}>
+                  Package:
+                </Text>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Text>{order.package.title}</Text>
+                <Text> AED {order.package.price.AED} </Text>
+              </div>
+
+              {order.addons.map((addon) => (
+                <>
+                  <div style={{ paddingTop: "2rem" }}>
+                    <Text style={{ color: "black", fontWeight: "bold" }}>
+                      Add-Ons:
+                    </Text>
+                  </div>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Text>{addon.title}</Text>
+                    <Text>
+                      {addon.currency} {addon.price}
+                    </Text>
+                  </div>
+                </>
+              ))}
+            </Card>
+          </Col>
+        </Row>
+      </Card>
+
+      <Card>
+        <h1>Uploaded Form Data</h1>
+        <br />
+        {orderFromData ? (
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            {orderFromData.map((item, key) => {
+              return (
+                <tr style={{ borderBottom: "1px solid #ddd;" }}>
+                  <td style={{ padding: "10px 0" }}>{item[0]}</td>
+                  <td>{item[1]}</td>
+                </tr>
+              );
+            })}
+          </table>
+        ) : (
+          <span>No form data uploaded yet</span>
+        )}
+      </Card>
+      {/* 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <span>
           <Typography.Title
@@ -240,11 +388,9 @@ const OrderDetailsPage = () => {
             style={{ marginTop: "3rem", fontWeight: "bold", marginTop: "3rem" }}
             level={3}
           >
-            {" "}
             Video Design
           </Typography.Title>
           <Card style={{ width: 400 }}>
-            {/* <ImageCard imgSrc={order.slideshow.URL} /> */}
             <ReactPlayer
               url={order.slideshow.URL}
               fallback={<p>Loading</p>}
@@ -289,7 +435,7 @@ const OrderDetailsPage = () => {
             ))}
           </Card>
         </span>
-      </div>
+      </div> */}
       {/* <div style={{ paddingTop: "4rem" }}>
         <Typography.Title level={3}> AddOns </Typography.Title>
         <Checkbox checked={true} style={{ color: "black" }}>

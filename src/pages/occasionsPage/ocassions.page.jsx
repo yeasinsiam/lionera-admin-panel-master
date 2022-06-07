@@ -148,7 +148,7 @@ const OcassionsPage = () => {
                     <img src={item.thumbnails} alt="occation_thumbnails" />
                   </div>
                 </td>
-                <td style={{ display: "flex" }}>
+                <td style={{ display: "flex", padding: "14px 0" }}>
                   <div>
                     <Link
                       to={`/ocassions/edit/${item._id}`}

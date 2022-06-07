@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Table, Typography } from "antd";
+import { Table, Tag, Typography } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 
@@ -71,24 +71,28 @@ const TableComponent = ({ data, tableSort }) => {
             backgroundColor: "inherit",
             cursor: "pointer",
           }}
+          // onClick={() => {
+          //   return (
+          //     order.status === "Incomplete" &&
+          //     history.push(`/order-details/${order.orderId}`)
+          //   );
+          // }}
           onClick={() => {
-            return (
-              order.status === "Incomplete" &&
-              history.push(`/order-details/${order.orderId}`)
-            );
+            return history.push(`/order-details/${order.orderId}`);
           }}
         >
-          <Text
+          {/* <Text
             type={order.status === "complete" ? "success" : "danger"}
             style={{ paddingRight: "6px" }}
           >
             {order.status}
-          </Text>
-          <EditOutlined
-            onClick={() => {
-              return history.push(`/order-details/${order.orderId}`);
-            }}
-          />
+          </Text> */}
+          {order.status === "pending" ? (
+            <Tag color="red">Pending</Tag>
+          ) : (
+            <Tag color="green">Success</Tag>
+          )}
+          <EditOutlined />
         </button>
       ),
     },
