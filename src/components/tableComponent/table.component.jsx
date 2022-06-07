@@ -62,6 +62,27 @@ const TableComponent = ({ data, tableSort }) => {
     { title: "Package", dataIndex: "package", key: "package" },
     { title: "Total", dataIndex: "total", key: "total" },
     {
+      title: "Financial Status",
+      key: "financial_status",
+      render: (order) => (
+        <button
+          style={{
+            border: "none",
+            backgroundColor: "inherit",
+            cursor: "pointer",
+          }}
+        >
+          {order.status === "paid" ? (
+            <Tag color="green">Paid</Tag>
+          ) : order.status === "refund" ? (
+            <Tag color="red">Refund</Tag>
+          ) : (
+            <Tag color="red">Unpaid</Tag>
+          )}
+        </button>
+      ),
+    },
+    {
       title: "Status",
       key: "status",
       render: (order) => (

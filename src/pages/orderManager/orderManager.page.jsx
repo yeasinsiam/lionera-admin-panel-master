@@ -48,6 +48,7 @@ const formatDataTable = (tableData) => {
       addons: data.addons.length ? "Yes" : "No",
       package: data.package.title,
       total: `AED ${totalPrice(data)}`,
+      financial_status: data.financial_status,
       status: data.order_status,
     });
 
