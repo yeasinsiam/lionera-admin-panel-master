@@ -106,7 +106,7 @@ const AddonsPage = () => {
         </Modal>
       )}
 
-      <div className="occationsTable">
+      <div className="formDiv">
         <table>
           <tr>
             <th>Arabic Title</th>
