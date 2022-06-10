@@ -72,13 +72,15 @@ const TableComponent = ({ data, tableSort }) => {
             cursor: "pointer",
           }}
         >
-          {order.status === "paid" ? (
+          {(order.financial_status === "paid" && (
             <Tag color="green">Paid</Tag>
-          ) : order.status === "refund" ? (
-            <Tag color="red">Refund</Tag>
-          ) : (
-            <Tag color="red">Unpaid</Tag>
-          )}
+          )) ||
+            (order.financial_status === "unpaid" && (
+              <Tag color="red">Unpaid</Tag>
+            )) ||
+            (order.financial_status === "refund" && (
+              <Tag color="orange">Refund</Tag>
+            ))}
         </button>
       ),
     },
@@ -91,23 +93,13 @@ const TableComponent = ({ data, tableSort }) => {
             border: "none",
             backgroundColor: "inherit",
             cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
           }}
-          // onClick={() => {
-          //   return (
-          //     order.status === "Incomplete" &&
-          //     history.push(`/order-details/${order.orderId}`)
-          //   );
-          // }}
           onClick={() => {
             return history.push(`/order-details/${order.orderId}`);
           }}
         >
-          {/* <Text
-            type={order.status === "complete" ? "success" : "danger"}
-            style={{ paddingRight: "6px" }}
-          >
-            {order.status}
-          </Text> */}
           {order.status === "pending" ? (
             <Tag color="red">Pending</Tag>
           ) : (

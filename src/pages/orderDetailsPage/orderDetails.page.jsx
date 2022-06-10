@@ -84,14 +84,7 @@ const OrderDetailsPage = () => {
         Order Details{" "}
       </Typography.Title>
       <Card style={{ marginTop: "4rem" }}>
-        <Row
-          gutter={[50, 20]}
-          // gutter={{
-          //   xs: 0,
-          //   // sm: 0,
-          //   md: 50,
-          // }}
-        >
+        <Row gutter={[50, 20]}>
           <Col className="gutter-row" xs={24} md={6}>
             <span>
               <Text style={{ fontWeight: "bold", color: "black" }}>
