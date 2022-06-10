@@ -62,6 +62,29 @@ const TableComponent = ({ data, tableSort }) => {
     { title: "Package", dataIndex: "package", key: "package" },
     { title: "Total", dataIndex: "total", key: "total" },
     {
+      title: "Financial Status",
+      key: "financial_status",
+      render: (order) => (
+        <button
+          style={{
+            border: "none",
+            backgroundColor: "inherit",
+            cursor: "pointer",
+          }}
+        >
+          {(order.financial_status === "paid" && (
+            <Tag color="green">Paid</Tag>
+          )) ||
+            (order.financial_status === "unpaid" && (
+              <Tag color="red">Unpaid</Tag>
+            )) ||
+            (order.financial_status === "refund" && (
+              <Tag color="orange">Refund</Tag>
+            ))}
+        </button>
+      ),
+    },
+    {
       title: "Status",
       key: "status",
       render: (order) => (
@@ -70,23 +93,13 @@ const TableComponent = ({ data, tableSort }) => {
             border: "none",
             backgroundColor: "inherit",
             cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
           }}
-          // onClick={() => {
-          //   return (
-          //     order.status === "Incomplete" &&
-          //     history.push(`/order-details/${order.orderId}`)
-          //   );
-          // }}
           onClick={() => {
             return history.push(`/order-details/${order.orderId}`);
           }}
         >
-          {/* <Text
-            type={order.status === "complete" ? "success" : "danger"}
-            style={{ paddingRight: "6px" }}
-          >
-            {order.status}
-          </Text> */}
           {order.status === "pending" ? (
             <Tag color="red">Pending</Tag>
           ) : (
