@@ -14,6 +14,7 @@ import Form from "./pages/form/form.page";
 import Login from "./pages/login.page";
 import { useAuth } from "./hooks/useAuth";
 import { Spin } from "antd";
+import ShippingAreasPage from "./pages/shippingAreas/shippingAreas.page";
 
 const Routes = () => {
   const { authed, authenticating } = useAuth();
@@ -64,7 +65,10 @@ const Routes = () => {
             path="/order-details/:orderId"
             render={(props) => <OrderDetailsPage {...props} />}
           />
-          <Route path="/ocassions/edit/:id" component={EditPage} />{" "}
+          <Route path="/ocassions/edit/:id" component={EditPage} />
+
+          {/* Shipping Areas */}
+          <Route path="/shipping-areas" component={ShippingAreasPage} />
         </>
       )}
 
