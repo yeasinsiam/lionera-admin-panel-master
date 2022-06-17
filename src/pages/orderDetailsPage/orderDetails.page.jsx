@@ -325,7 +325,6 @@ const OrderDetailsPage = () => {
                 <Text>{order.package.title}</Text>
                 <Text> AED {order.package.price.AED} </Text>
               </div>
-
               <div style={{ paddingTop: "2rem" }}>
                 <Text style={{ color: "black", fontWeight: "bold" }}>
                   Add-Ons:
@@ -343,6 +342,20 @@ const OrderDetailsPage = () => {
                   </div>
                 </>
               ))}
+              <hr />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Text>Subtotal</Text>
+                <Text>AED {order.prices.AED.subTotal}</Text>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Text>Shipping charge</Text>
+                <Text>AED {order.prices.AED.shippingCharge}</Text>
+              </div>
+              <hr />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Text>Total</Text>
+                <Text>AED {order.prices.AED.totalPrice}</Text>
+              </div>
             </Card>
           </Col>
         </Row>
