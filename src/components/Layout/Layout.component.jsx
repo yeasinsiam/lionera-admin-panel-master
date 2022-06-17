@@ -111,6 +111,9 @@ const GeneralLayout = () => {
                   <Menu.Item key="ordermanager" icon={<ProfileOutlined />}>
                     Order Manager
                   </Menu.Item>
+                  <Menu.Item key="shipping-areas" icon={<ProfileOutlined />}>
+                    Shipping Areas
+                  </Menu.Item>
 
                   <Menu.Item key="logout" icon={<LogoutOutlined />}>
                     Logout

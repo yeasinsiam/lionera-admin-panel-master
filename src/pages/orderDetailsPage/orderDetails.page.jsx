@@ -53,6 +53,7 @@ const OrderDetailsPage = () => {
       await axios.put(`/api/v1/orders/${order._id}`, {
         ...body,
       });
+      message.success(`Order status updated`);
     } catch (err) {
       console.log(err);
       message.error(`Something went wrong, Refresh and try again`);
@@ -70,12 +71,15 @@ const OrderDetailsPage = () => {
       await axios.put(`/api/v1/orders/${order._id}`, {
         ...body,
       });
+      message.success(`Finantial status updated`);
     } catch (err) {
       console.log(err);
       message.error(`Something went wrong, Refresh and try again`);
     }
     setOrderStatusLoading(false);
   };
+
+  console.log(order);
 
   return (
     <div style={{ paddingTop: "6rem" }}>
@@ -182,7 +186,7 @@ const OrderDetailsPage = () => {
               <Text style={{ fontWeight: "bold", color: "black" }}>
                 User Name:
               </Text>
-              <Text>{order.shipping.name}</Text>
+              <Text> {order.shipping.name}</Text>
             </span>
           </Col>
           <Col className="gutter-row" xs={24} md={8}>
@@ -321,14 +325,13 @@ const OrderDetailsPage = () => {
                 <Text>{order.package.title}</Text>
                 <Text> AED {order.package.price.AED} </Text>
               </div>
-
+              <div style={{ paddingTop: "2rem" }}>
+                <Text style={{ color: "black", fontWeight: "bold" }}>
+                  Add-Ons:
+                </Text>
+              </div>
               {order.addons.map((addon) => (
                 <>
-                  <div style={{ paddingTop: "2rem" }}>
-                    <Text style={{ color: "black", fontWeight: "bold" }}>
-                      Add-Ons:
-                    </Text>
-                  </div>
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
@@ -339,6 +342,20 @@ const OrderDetailsPage = () => {
                   </div>
                 </>
               ))}
+              <hr />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Text>Subtotal</Text>
+                <Text>AED {order.prices.AED.subTotal}</Text>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Text>Shipping charge</Text>
+                <Text>AED {order.prices.AED.shippingCharge}</Text>
+              </div>
+              <hr />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Text>Total</Text>
+                <Text>AED {order.prices.AED.totalPrice}</Text>
+              </div>
             </Card>
           </Col>
         </Row>

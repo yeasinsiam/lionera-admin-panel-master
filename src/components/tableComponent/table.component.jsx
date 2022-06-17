@@ -100,11 +100,17 @@ const TableComponent = ({ data, tableSort }) => {
             return history.push(`/order-details/${order.orderId}`);
           }}
         >
-          {order.status === "pending" ? (
-            <Tag color="red">Pending</Tag>
-          ) : (
-            <Tag color="green">Success</Tag>
-          )}
+          <Tag
+            color={
+              (order.status === "pending" && "magenta") ||
+              (order.status === "canceled" && "red") ||
+              (order.status === "refund" && "orange") ||
+              (order.status === "delivered" && "green")
+            }
+            style={{ textTransform: "capitalize" }}
+          >
+            {order.status}
+          </Tag>
           <EditOutlined />
         </button>
       ),

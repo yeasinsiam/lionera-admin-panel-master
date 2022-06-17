@@ -65,7 +65,7 @@ const formatDataTable = (tableData) => {
       orderDate: formatDate(data.createdAt),
       addons: data.addons.length ? "Yes" : "No",
       package: data.package.title,
-      total: `AED ${totalPrice(data)}`,
+      total: `AED ${data.prices.AED.totalPrice}`,
       financial_status: data.financial_status,
       status: data.order_status,
     });
@@ -74,13 +74,6 @@ const formatDataTable = (tableData) => {
   }, []);
 };
 
-const totalPrice = (data) => {
-  const addonsTotal = data.addons.reduce((carry, item) => {
-    carry += parseInt(item.price);
-    return carry;
-  }, 0);
-  const packagePrice = parseInt(data.package.price.AED);
-  return addonsTotal + packagePrice;
-};
+//
 
 export default OrderManager;
