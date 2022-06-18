@@ -57,10 +57,11 @@ const EditShippingArea = ({
   if (!data) {
     return <Spin />;
   }
+  console.log(data);
 
   const formInitialValus = {
     name: data.name,
-    price: data.price,
+    price: data.price.AED,
   };
 
   return (
