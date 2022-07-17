@@ -135,7 +135,7 @@ const EditOccations = ({
     return initialValues;
   };
 
-  console.log(data);
+  // console.log(data);
   return (
     <div>
       <Form

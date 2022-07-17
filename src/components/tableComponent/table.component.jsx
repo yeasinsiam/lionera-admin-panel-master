@@ -5,7 +5,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 
 const TableComponent = ({ data, tableSort }) => {
-  console.log(data);
+  // console.log(data);
 
   const history = useHistory();
 

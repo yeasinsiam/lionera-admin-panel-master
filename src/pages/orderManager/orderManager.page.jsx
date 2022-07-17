@@ -59,13 +59,17 @@ const OrderManager = () => {
 
 const formatDataTable = (tableData) => {
   return tableData.reduce((carry, data, index) => {
+    if (!data.prices) {
+      console.log(data);
+    }
+
     carry.push({
       key: `${index + 1}`,
       orderId: data._id,
       orderDate: formatDate(data.createdAt),
       addons: data.addons.length ? "Yes" : "No",
       package: data.package.title,
-      total: `AED ${data.prices.AED.totalPrice}`,
+      total: `AED ${data.prices ? data.prices.AED.totalPrice : ""}`,
       financial_status: data.financial_status,
       status: data.order_status,
     });
